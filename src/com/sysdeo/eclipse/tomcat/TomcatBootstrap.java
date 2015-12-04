@@ -339,6 +339,10 @@ public abstract class TomcatBootstrap {
 			try {
 				ProjectListElement ple = (ProjectListElement) it.next();
 				IJavaProject jproject = JavaCore.create(ple.getProject());
+				
+				jproject.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
+				jproject.getJavaModel().refreshExternalArchives(jproject.getChildren(), null);
+				
 				result = this.addProjectToClasspath(result, jproject);
 			} catch (Exception e) {
 				// nothing will be added to classpath
