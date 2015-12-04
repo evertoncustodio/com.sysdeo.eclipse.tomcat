@@ -20,12 +20,20 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.model.ISourceLocator;
+import org.eclipse.debug.core.sourcelookup.ISourceContainer;
+import org.eclipse.debug.core.sourcelookup.ISourceLookupDirector;
+import org.eclipse.debug.core.sourcelookup.ISourcePathComputer;
+import org.eclipse.debug.core.sourcelookup.containers.DefaultSourceContainer;
 import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.launching.JavaSourceLookupDirector;
 import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.launching.sourcelookup.containers.JavaProjectSourceContainer;
 
 import com.sysdeo.eclipse.tomcat.editors.ProjectListElement;
 
@@ -326,24 +334,17 @@ public abstract class TomcatBootstrap {
 	private String[] addPreferenceProjectListToClasspath(String[] previouscp) {
 		List projectsList = TomcatLauncherPlugin.getDefault().getProjectsInCP();
 		String[] result = previouscp;
-		
-		
 		Iterator it = projectsList.iterator();
 		while (it.hasNext()) {
 			try {
-				
 				ProjectListElement ple = (ProjectListElement) it.next();
 				IJavaProject jproject = JavaCore.create(ple.getProject());
-				
-				jproject.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
-				jproject.getJavaModel().refreshExternalArchives(jproject.getChildren(), null);
-				
 				result = this.addProjectToClasspath(result, jproject);
-				
 			} catch (Exception e) {
 				// nothing will be added to classpath
 			}
 		}
+
 		return result;
 
 	}

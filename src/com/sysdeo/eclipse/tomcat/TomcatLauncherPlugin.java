@@ -89,8 +89,8 @@ public class TomcatLauncherPlugin extends AbstractUIPlugin {
 	/**
 	 * The constructor.
 	 */
-	public TomcatLauncherPlugin(IPluginDescriptor descriptor) {
-		super(descriptor);
+	public TomcatLauncherPlugin() {
+		super();
 		plugin = this;
 		try {
 			resourceBundle= PropertyResourceBundle.getBundle("resources");
